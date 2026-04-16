@@ -53,8 +53,8 @@ function App() {
     });
     socket.on("game_finished", (payload) => { setResults(payload.results); setQuestion(null); setAccountHighscores(payload.accountHighscores || []); });
 
-    fetch("http://localhost:3001/highscores").then(r => r.json()).then(setHighscores).catch(() => {});
-    fetch("http://localhost:3001/account-highscores").then(r => r.json()).then(setAccountHighscores).catch(() => {});
+fetch(BACKEND_URL + "/highscores").then(r => r.json()).then(setHighscores).catch(() => {});
+fetch(BACKEND_URL + "/account-highscores").then(r => r.json()).then(setAccountHighscores).catch(() => {});
 
     return () => {
       ["registered","profile_updated","online_count","invitation_received","lobby_update","highscores_updated","account_highscores_updated","game_question","round_result","joker_result","game_finished"]
