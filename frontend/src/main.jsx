@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { io } from "socket.io-client";
 
-const BACKEND_URL = window.__APP_CONFIG__?.BACKEND_URL || "https://DEINE-RENDER-URL.onrender.com";
+const BACKEND_URL = window.__APP_CONFIG__?.BACKEND_URL || "https://moos-iq-backend.onrender.com";
 const socket = io(BACKEND_URL);
 
 const styles = {
