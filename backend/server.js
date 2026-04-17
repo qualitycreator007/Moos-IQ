@@ -301,15 +301,18 @@ io.on("connection", (socket) => {
     emitOnlineCount();
   });
 
-  socket.on("add_friend", ({ userId, friendUserId }) => {
-    const user = state.users.get(userId);
-    const friend = state.users.get(friendUserId);
-    if (!user || !friend) return;
-    if (!user.friends.includes(friendUserId)) user.friends.push(friendUserId);
-    if (!friend.friends.includes(userId)) friend.friends.push(userId);
-    socket.emit("profile_updated", serializeUser(user));
-    if (friend.socketId) io.to(friend.socketId).emit("profile_updated", serializeUser(friend));
-  });
+  socket.on("register_user", ({ name }) => {
+  const userId = uuidv4();
+  const user = { userId, name: name || "Spieler", socketId: socket.id, friends: [], online: true };
+  state.users.set(userId, user);
+  state.sockets.set(socket.id, userId);
+  socket.emit("registered", serializeUser(user));
+  socket.emit("account_highscores_updated", sortedAccountTotals());
+  emitOnlineCount();
+
+  const soloLobby = createLobby(userId, [], true);
+  startLobby(soloLobby);
+});
 
   socket.on("invite_players", ({ hostUserId, invitedUserIds }) => {
     const host = state.users.get(hostUserId);
