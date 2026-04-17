@@ -37,7 +37,16 @@ function App() {
   const [timeLeftMs, setTimeLeftMs] = React.useState(0);
 
   React.useEffect(() => {
-    socket.on("registered", (user) => { setMe(user); setFriends(user.friends || []); });
+socket.on("registered", (user) => { 
+  setMe(user); 
+  setFriends(user.friends || []);
+
+  // 🔥 AUTO SOLO START
+  socket.emit("invite_players", {
+    hostUserId: user.userId,
+    invitedUserIds: []
+  });
+});
     socket.on("profile_updated", (user) => { setMe(user); setFriends(user.friends || []); });
     socket.on("online_count", ({ onlineCount }) => setOnlineCount(onlineCount));
     socket.on("invitation_received", (payload) => setInvitation(payload));
